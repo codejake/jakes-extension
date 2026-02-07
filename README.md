@@ -1,6 +1,6 @@
 # Jake's Extension
 
-Jake's Extension is a Manifest V3 browser extension for quickly extracting and auditing useful page data from a popup menu.
+Jake's Extension is a Manifest V3 browser extension that quickly extracts and audits useful page data from a popup menu. It replaces several third-party extensions I previously used, in an attempt to reduce my exposure to supply chain attacks.
 
 It opens results in a new tab and supports exporting results to JSON and CSV (where applicable).
 
