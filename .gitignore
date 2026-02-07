@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment / local config
+.env
+.env.*
+!.env.example
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build/dist artifacts (if you add a build step later)
+dist/
+build/
+out/
+coverage/
+*.zip
+
+# Dependency directories (if you add tooling)
+node_modules/
+
+# OS temp files
+Thumbs.db
