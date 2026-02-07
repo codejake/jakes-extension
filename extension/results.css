@@ -167,6 +167,13 @@ button:disabled {
   font-size: 13px;
 }
 
+.button-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
 .result-list {
   margin: 0;
   padding: 0;

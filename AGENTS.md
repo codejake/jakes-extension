@@ -21,7 +21,7 @@
   - `Extract all links`
   - `Find and copy emails / phone numbers`
   - `SEO snapshot`
-  - `Table to CSV`
+  - `Table Export`
   - `Readability mode`
   - `Performance hints`
   - `DOM query runner`

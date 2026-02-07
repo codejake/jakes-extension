@@ -401,15 +401,44 @@ function renderTables(tables, scan) {
     meta.textContent = `${table.rowCount} rows x ${table.colCount} columns`;
     card.appendChild(meta);
 
+    const buttonRow = document.createElement("div");
+    buttonRow.className = "button-row";
+
     if (table.csv) {
-      const exportBtn = document.createElement("button");
-      exportBtn.type = "button";
-      exportBtn.textContent = "Export This Table CSV";
-      exportBtn.addEventListener("click", () => {
+      const csvBtn = document.createElement("button");
+      csvBtn.type = "button";
+      csvBtn.textContent = "Export Table CSV";
+      csvBtn.addEventListener("click", () => {
         const name = toSafeFilename(scan, "csv", `table-${table.index + 1}`);
         downloadFile(name, "text/csv", table.csv);
       });
-      card.appendChild(exportBtn);
+      buttonRow.appendChild(csvBtn);
+    }
+
+    if ((table.rows || []).length) {
+      const jsonBtn = document.createElement("button");
+      jsonBtn.type = "button";
+      jsonBtn.textContent = "Export Table JSON";
+      jsonBtn.addEventListener("click", () => {
+        const name = toSafeFilename(scan, "json", `table-${table.index + 1}`);
+        const content = JSON.stringify(
+          {
+            index: table.index,
+            caption: table.caption,
+            rowCount: table.rowCount,
+            colCount: table.colCount,
+            rows: table.rows,
+          },
+          null,
+          2,
+        );
+        downloadFile(name, "application/json", content);
+      });
+      buttonRow.appendChild(jsonBtn);
+    }
+
+    if (buttonRow.childElementCount > 0) {
+      card.appendChild(buttonRow);
     }
 
     if ((table.previewRows || []).length) {

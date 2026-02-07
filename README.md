@@ -34,10 +34,10 @@ It opens results in a new tab and supports exporting results to JSON and CSV (wh
   - Open Graph / Twitter metadata
   - basic issue flags
 
-### 5) Table to CSV
+### 5) Table Export
 - Detects HTML tables on the page
 - Shows a preview of each table
-- Supports per-table CSV export and combined CSV export
+- Supports per-table CSV and JSON export, plus combined CSV export
 
 ### 6) Readability mode
 - Extracts the main readable article-like content

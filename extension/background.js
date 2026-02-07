@@ -3,7 +3,7 @@ const ACTION_DEFS = {
   links: { label: "Extract all links" },
   contacts: { label: "Find and copy emails / phone numbers" },
   seo: { label: "SEO snapshot" },
-  tables: { label: "Table to CSV" },
+  tables: { label: "Table Export" },
   readability: { label: "Readability mode" },
   performance: { label: "Performance hints" },
   "dom-query": { label: "DOM query runner" },
@@ -465,6 +465,7 @@ function runCollector(actionId, options) {
         caption,
         rowCount: paddedRows.length,
         colCount: clamp(maxCols, 0, 24),
+        rows: paddedRows,
         previewRows: paddedRows.slice(0, 10),
         csv,
       };

@@ -6,7 +6,7 @@ const ACTION_LABELS = {
   links: "Extract all links",
   contacts: "Find and copy emails / phone numbers",
   seo: "SEO snapshot",
-  tables: "Table to CSV",
+  tables: "Table Export",
   readability: "Readability mode",
   performance: "Performance hints",
   "dom-query": "DOM query runner",
