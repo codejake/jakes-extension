@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Jake's Extension",
+  "version": "0.1.0",
+  "description": "Run page actions from a popup menu and inspect linked/visible images.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Jake's Extension",
+    "default_popup": "popup.html"
+  }
+}

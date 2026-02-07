@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Jake's Extension</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>Actions</h1>
+      <div class="actions">
+        <button type="button" class="action-btn" data-action-id="images">Show all linked images on page</button>
+        <button type="button" class="action-btn" data-action-id="links">Extract all links</button>
+        <button type="button" class="action-btn" data-action-id="contacts">Find and copy emails / phone numbers</button>
+        <button type="button" class="action-btn" data-action-id="seo">SEO snapshot</button>
+        <button type="button" class="action-btn" data-action-id="tables">Table to CSV</button>
+        <button type="button" class="action-btn" data-action-id="readability">Readability mode</button>
+        <button type="button" class="action-btn" data-action-id="performance">Performance hints</button>
+        <button type="button" class="action-btn" data-action-id="dom-query">DOM query runner</button>
+        <button type="button" class="action-btn" data-action-id="privacy">Privacy tracker inspector</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

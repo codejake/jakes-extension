@@ -1,0 +1,95 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f4f7fb;
+  --bg-gradient-top: #ffffff;
+  --panel: #ffffff;
+  --border: #ccd7e3;
+  --text: #182230;
+  --muted: #4d5d70;
+  --accent: #0f8b7a;
+  --accent-strong: #0a7365;
+  --hover-panel: #edf4fb;
+  --error: #b42318;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #11161d;
+    --bg-gradient-top: #0f141a;
+    --panel: #18222d;
+    --border: #2c3c4d;
+    --text: #f3f7fa;
+    --muted: #b8c6d3;
+    --accent: #66d1c1;
+    --accent-strong: #4fc0b0;
+    --hover-panel: #1b2a36;
+    --error: #ff9d9d;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 360px;
+  background: linear-gradient(180deg, var(--bg-gradient-top), var(--bg));
+  color: var(--text);
+}
+
+.app {
+  padding: 14px;
+}
+
+h1 {
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+.actions {
+  display: grid;
+  gap: 8px;
+  max-height: 440px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.action-btn {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.action-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--hover-panel);
+}
+
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.status {
+  min-height: 20px;
+  margin: 10px 2px 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.status.error {
+  color: var(--error);
+}
+
+.status.success {
+  color: var(--accent-strong);
+}
