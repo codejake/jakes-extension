@@ -34,24 +34,32 @@ It opens results in a new tab and supports exporting results to JSON and CSV (wh
   - Open Graph / Twitter metadata
   - basic issue flags
 
-### 5) Table Export
+### 5) Summarize page structure
+- Counts common page elements (headings, paragraphs, links, forms, tables, media, scripts, etc.)
+- Includes heading level counts and sample heading text
+
+### 6) Table Export
 - Detects HTML tables on the page
 - Shows a preview of each table
 - Supports per-table CSV and JSON export, plus combined CSV export
 
-### 6) Readability mode
+### 7) Color palette extractor
+- Finds top visible colors used on the page
+- Shows ranked swatches with HEX/RGB values and usage counts
+
+### 8) Readability mode
 - Extracts the main readable article-like content
 - Presents simplified text view in the results tab
 
-### 7) Performance hints
+### 9) Performance hints
 - Runs lightweight heuristic checks (not a full Lighthouse audit)
 - Flags common issues such as potentially oversized images and blocking scripts
 
-### 8) DOM query runner
+### 10) DOM query runner
 - Prompts for a CSS selector
 - Returns matching elements with quick metadata and HTML snippets
 
-### 9) Privacy tracker inspector
+### 11) Privacy tracker inspector
 - Summarizes third-party domains observed from page resources/scripts/iframes
 - Categorizes domains into basic groups (analytics, ads, social, etc.)
 

@@ -21,7 +21,9 @@
   - `Extract all links`
   - `Find and copy emails / phone numbers`
   - `SEO snapshot`
+  - `Summarize page structure`
   - `Table Export`
+  - `Color palette extractor`
   - `Readability mode`
   - `Performance hints`
   - `DOM query runner`

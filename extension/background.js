@@ -3,7 +3,9 @@ const ACTION_DEFS = {
   links: { label: "Extract all links" },
   contacts: { label: "Find and copy emails / phone numbers" },
   seo: { label: "SEO snapshot" },
+  structure: { label: "Summarize page structure" },
   tables: { label: "Table Export" },
+  palette: { label: "Color palette extractor" },
   readability: { label: "Readability mode" },
   performance: { label: "Performance hints" },
   "dom-query": { label: "DOM query runner" },
@@ -488,6 +490,177 @@ function runCollector(actionId, options) {
     };
   }
 
+  function collectStructure() {
+    const headings = Array.from(document.querySelectorAll("h1, h2, h3, h4, h5, h6"));
+    const headingCounts = {
+      h1: 0,
+      h2: 0,
+      h3: 0,
+      h4: 0,
+      h5: 0,
+      h6: 0,
+    };
+    headings.forEach((heading) => {
+      const key = heading.tagName.toLowerCase();
+      if (Object.prototype.hasOwnProperty.call(headingCounts, key)) {
+        headingCounts[key] += 1;
+      }
+    });
+
+    const summary = {
+      headings: headings.length,
+      paragraphs: document.querySelectorAll("p").length,
+      links: document.querySelectorAll("a[href]").length,
+      buttons: document.querySelectorAll("button, input[type='button'], input[type='submit']").length,
+      forms: document.querySelectorAll("form").length,
+      lists: document.querySelectorAll("ul, ol").length,
+      listItems: document.querySelectorAll("li").length,
+      tables: document.querySelectorAll("table").length,
+      images: document.querySelectorAll("img").length,
+      videos: document.querySelectorAll("video").length,
+      audios: document.querySelectorAll("audio").length,
+      iframes: document.querySelectorAll("iframe").length,
+      scripts: document.querySelectorAll("script").length,
+    };
+
+    const headingSamples = headings
+      .slice(0, 30)
+      .map((heading) => ({
+        level: heading.tagName.toLowerCase(),
+        text: (heading.textContent || "").replace(/\s+/g, " ").trim().slice(0, 220),
+      }))
+      .filter((item) => item.text);
+
+    return {
+      stats: [
+        summarizeStat("Elements Counted", Object.keys(summary).length),
+        summarizeStat("Total Headings", summary.headings),
+        summarizeStat("Paragraphs", summary.paragraphs),
+      ],
+      summary,
+      headingCounts,
+      headingSamples,
+      csvContent: toCsv([
+        ["metric", "value"],
+        ...Object.entries(summary).map(([metric, value]) => [metric, String(value)]),
+        ...Object.entries(headingCounts).map(([metric, value]) => [metric, String(value)]),
+      ]),
+    };
+  }
+
+  function collectPalette() {
+    const colorMap = new Map();
+    const maxElements = 2500;
+    const nodes = Array.from(document.querySelectorAll("*")).slice(0, maxElements);
+
+    function normalizeColor(value) {
+      if (!value || typeof value !== "string") {
+        return "";
+      }
+      const trimmed = value.trim();
+      if (!trimmed || trimmed === "transparent" || trimmed === "inherit") {
+        return "";
+      }
+
+      const match = parseRgbColor(trimmed);
+      if (!match) {
+        return "";
+      }
+
+      const { r, g, b, a } = match;
+      if (!Number.isFinite(r) || !Number.isFinite(g) || !Number.isFinite(b) || !Number.isFinite(a)) {
+        return "";
+      }
+      if (a < 0.05) {
+        return "";
+      }
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function parseRgbColor(input) {
+      const commaMatch = input.match(
+        /^rgba?\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})(?:\s*,\s*([0-9.]+))?\s*\)$/i,
+      );
+      if (commaMatch) {
+        return {
+          r: Math.min(255, Number(commaMatch[1])),
+          g: Math.min(255, Number(commaMatch[2])),
+          b: Math.min(255, Number(commaMatch[3])),
+          a: commaMatch[4] === undefined ? 1 : Number(commaMatch[4]),
+        };
+      }
+
+      const spaceMatch = input.match(
+        /^rgba?\(\s*([0-9]{1,3})\s+([0-9]{1,3})\s+([0-9]{1,3})(?:\s*\/\s*([0-9.]+))?\s*\)$/i,
+      );
+      if (spaceMatch) {
+        return {
+          r: Math.min(255, Number(spaceMatch[1])),
+          g: Math.min(255, Number(spaceMatch[2])),
+          b: Math.min(255, Number(spaceMatch[3])),
+          a: spaceMatch[4] === undefined ? 1 : Number(spaceMatch[4]),
+        };
+      }
+
+      return null;
+    }
+
+    function toHex(rgb) {
+      const match = rgb.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
+      if (!match) {
+        return "";
+      }
+      const n = [Number(match[1]), Number(match[2]), Number(match[3])];
+      return `#${n.map((value) => value.toString(16).padStart(2, "0")).join("")}`;
+    }
+
+    function addColor(raw) {
+      const normalized = normalizeColor(raw);
+      if (!normalized) {
+        return;
+      }
+      const existing = colorMap.get(normalized) || { rgb: normalized, hex: toHex(normalized), count: 0 };
+      existing.count += 1;
+      colorMap.set(normalized, existing);
+    }
+
+    nodes.forEach((node) => {
+      const style = getComputedStyle(node);
+      addColor(style.color);
+      addColor(style.backgroundColor);
+      addColor(style.borderTopColor);
+      addColor(style.borderRightColor);
+      addColor(style.borderBottomColor);
+      addColor(style.borderLeftColor);
+    });
+
+    const colors = Array.from(colorMap.values())
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20)
+      .map((color, index) => ({
+        rank: index + 1,
+        ...color,
+      }));
+
+    return {
+      stats: [
+        summarizeStat("Sampled Elements", nodes.length),
+        summarizeStat("Unique Visible Colors", colorMap.size),
+        summarizeStat("Top Colors Returned", colors.length),
+      ],
+      colors,
+      csvContent: toCsv([
+        ["rank", "hex", "rgb", "count"],
+        ...colors.map((color) => [
+          String(color.rank),
+          color.hex,
+          color.rgb,
+          String(color.count),
+        ]),
+      ]),
+    };
+  }
+
   function collectReadability() {
     const candidates = [
       ...Array.from(document.querySelectorAll("article, main, [role='main']")),
@@ -785,7 +958,9 @@ function runCollector(actionId, options) {
   if (actionId === "links") return collectLinks();
   if (actionId === "contacts") return collectContacts();
   if (actionId === "seo") return collectSeo();
+  if (actionId === "structure") return collectStructure();
   if (actionId === "tables") return collectTables();
+  if (actionId === "palette") return collectPalette();
   if (actionId === "readability") return collectReadability();
   if (actionId === "performance") return collectPerformance();
   if (actionId === "dom-query") return collectDomQuery(options);

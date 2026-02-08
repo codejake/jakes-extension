@@ -123,8 +123,14 @@ function renderContent(scan) {
     case "seo":
       renderSeo(scan.data || {});
       break;
+    case "structure":
+      renderStructure(scan.data || {});
+      break;
     case "tables":
       renderTables(scan.data?.tables || [], scan);
+      break;
+    case "palette":
+      renderPalette(scan.data?.colors || []);
       break;
     case "readability":
       renderReadability(scan.data || {});
@@ -466,6 +472,117 @@ function renderTables(tables, scan) {
   });
 
   contentEl.appendChild(stack);
+}
+
+function renderStructure(data) {
+  const summary = data.summary || {};
+  const headingCounts = data.headingCounts || {};
+  const headingSamples = data.headingSamples || [];
+
+  if (!Object.keys(summary).length) {
+    emptyEl.hidden = false;
+    emptyEl.textContent = "No structure data found.";
+    return;
+  }
+
+  const card = document.createElement("section");
+  card.className = "card";
+
+  const heading = document.createElement("h2");
+  heading.className = "card-head";
+  heading.textContent = "Page Structure Summary";
+  card.appendChild(heading);
+
+  const table = document.createElement("table");
+  table.className = "kv";
+  Object.entries(summary).forEach(([metric, value]) => {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.textContent = metric;
+    const td = document.createElement("td");
+    td.textContent = String(value);
+    tr.appendChild(th);
+    tr.appendChild(td);
+    table.appendChild(tr);
+  });
+  Object.entries(headingCounts).forEach(([metric, value]) => {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.textContent = metric;
+    const td = document.createElement("td");
+    td.textContent = String(value);
+    tr.appendChild(th);
+    tr.appendChild(td);
+    table.appendChild(tr);
+  });
+  card.appendChild(table);
+  contentEl.appendChild(card);
+
+  if (headingSamples.length) {
+    const sampleCard = document.createElement("section");
+    sampleCard.className = "card";
+    const sampleHeading = document.createElement("h2");
+    sampleHeading.className = "card-head";
+    sampleHeading.textContent = `Heading Samples (${headingSamples.length})`;
+    sampleCard.appendChild(sampleHeading);
+
+    const list = document.createElement("ul");
+    list.className = "result-list";
+    headingSamples.forEach((item) => {
+      const li = document.createElement("li");
+      li.className = "result-item";
+      const tags = document.createElement("div");
+      tags.className = "tags";
+      tags.appendChild(makeTag(item.level));
+      const text = document.createElement("p");
+      text.className = "meta-row";
+      text.textContent = item.text;
+      li.appendChild(tags);
+      li.appendChild(text);
+      list.appendChild(li);
+    });
+    sampleCard.appendChild(list);
+    contentEl.appendChild(sampleCard);
+  }
+}
+
+function renderPalette(colors) {
+  if (!colors.length) {
+    emptyEl.hidden = false;
+    emptyEl.textContent = "No visible colors found.";
+    return;
+  }
+
+  const list = document.createElement("ul");
+  list.className = "result-list";
+
+  colors.forEach((color) => {
+    const item = document.createElement("li");
+    item.className = "result-item color-item";
+
+    const swatch = document.createElement("div");
+    swatch.className = "color-swatch";
+    swatch.style.backgroundColor = color.rgb;
+
+    const main = document.createElement("div");
+    main.className = "item-main";
+
+    const title = document.createElement("p");
+    title.className = "meta-row";
+    title.textContent = `#${color.rank} - ${color.hex}`;
+
+    const detail = document.createElement("p");
+    detail.className = "meta-row";
+    detail.textContent = `${color.rgb} | used ${color.count} times`;
+
+    main.appendChild(title);
+    main.appendChild(detail);
+    item.appendChild(swatch);
+    item.appendChild(main);
+    list.appendChild(item);
+  });
+
+  contentEl.appendChild(list);
 }
 
 function renderReadability(data) {

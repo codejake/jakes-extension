@@ -196,6 +196,11 @@ button:disabled {
   align-items: start;
 }
 
+.result-item.color-item {
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+}
+
 .thumb-wrap {
   width: 120px;
   height: 90px;
@@ -218,6 +223,13 @@ button:disabled {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.color-swatch {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
 }
 
 .item-main {
