@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>Jake's Extension</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <i></i>
+          <i></i>
+          <i></i>
+        </span>
+        <h1>Jake's Extension</h1>
+      </div>
+      <span class="signal-count">11 actions</span>
+    </header>
+    <main class="app">
+      <p class="section-label">Page actions</p>
+      <div class="actions signal-sheet">
+        <button type="button" class="action-btn" data-action-id="images">Show all linked images on page</button>
+        <button type="button" class="action-btn" data-action-id="links">Extract all links</button>
+        <button type="button" class="action-btn" data-action-id="contacts">Find and copy emails / phone numbers</button>
+        <button type="button" class="action-btn" data-action-id="seo">SEO snapshot</button>
+        <button type="button" class="action-btn" data-action-id="structure">Summarize page structure</button>
+        <button type="button" class="action-btn" data-action-id="tables">Table export</button>
+        <button type="button" class="action-btn" data-action-id="palette">Color palette extractor</button>
+        <button type="button" class="action-btn" data-action-id="readability">Readability mode</button>
+        <button type="button" class="action-btn" data-action-id="performance">Performance hints</button>
+        <button type="button" class="action-btn" data-action-id="dom-query">DOM query runner</button>
+        <button type="button" class="action-btn" data-action-id="privacy">Privacy tracker inspector</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
